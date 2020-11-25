@@ -44,7 +44,7 @@ int main()
         available.push_back(input);
     }
     
-    int flag=0;
+    //int flag=0;
     for(int i=0;i<p;i++)
     {
         for(int j=0;j<r;j++)
@@ -52,41 +52,61 @@ int main()
             need[i][j]=max[i][j]-allocation[i][j];
         }
     }
-    
-    int f[p], ans[p], ind = 0; 
-    for (int k = 0; k < p; k++) { 
-        f[k] = 0; 
+    cout<<"need matrix done"<<endl;
+    for(int i=0;i<p;i++)
+    {
+        for(int j=0;j<r;j++)
+        {
+            cout<<need[i][j]<<" ";
+        }
+        cout<<endl;
     }
+    cout<<endl;
     
-    int y=0;
-
-    for (int k = 0; k < p; k++) { 
-        for (int i = 0; i < p; i++) { 
-            if (f[i] == 0) { 
-  
-                int flag = 0; 
-                for (int j = 0; j < r; j++) { 
-                    if (need[i][j] > available[j]){ //check if process can go in deadlock
-                        flag = 1; 
-                        break; 
-                    } 
-                } 
-  
-                if (flag == 0) { //if not in deadlock
-                    ans[ind++] = i; 
-                    for (y = 0; y < r; y++) 
-                        available[y] += allocation[i][y]; //first allot and then release the resources
-                    f[i] = 1; 
-                } 
-            } 
-        } 
-    } 
-    
-    cout << "To avoid deadlock process should be executed as: " << endl; 
-    for (int i = 0; i < p - 1; i++) {
-        cout << " P" << ans[i] << " ->"; 
-        cout << " P" << ans[p - 1] <<endl; 
-    }    
-    
+    set<int> s;
+    vector<int> ans;
+    int flag=1;
+    int i=0;
+    while(s.size()!=p)
+    {
+    	if(i==2)
+    	{
+    		//cout<<"Breakpoint"<<endl;
+		}
+    	if(s.count(i)==0)
+    	{
+    		for(int j=0;j<r;j++)
+	    	{
+	    		if(need[i][j]>available[j])
+	    		{
+	    			flag=0;
+	    			break;
+				}
+			}
+			if(flag==1)
+			{
+				for(int k=0;k<r;k++)
+				{
+					available[k]=need[i][k]+available[k];
+				}
+				s.insert(i);
+				ans.push_back(i);
+				//cout<<"Done "<<i<<endl;
+			}
+			
+		}
+		i=i+1;
+			if(i==p)
+			{
+				i=0;
+			}
+		flag=1;
+	}
+    cout << "To avoid deadlock process should be executed as: " << endl;
+	for(int i=0;i<p;i++)
+	{
+		cout<<"P"<<ans[i]<<" ";
+	} 
+	 
+   
 }
-
